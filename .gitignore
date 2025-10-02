@@ -419,3 +419,11 @@ FodyWeavers.xsd
 
 # Ignore Model folder
 MLModule/Model/
+
+# Ignore Virtual Environment
+venv/
+.venv/
+
+# Ignore Byproduct Files/Folders
+Backend/quarantine
+Backend/detections.jsonl
