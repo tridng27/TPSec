@@ -1,5 +1,11 @@
-numpy
-xgboost
 lief
 scikit-learn
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-multipart
 watchdog
+xgboost
+numpy
+websockets
