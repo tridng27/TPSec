@@ -1,0 +1,128 @@
+{
+  "C:\\Users\\Admin/Downloads\\ZaloSetup-25.10.3.exe": {
+    "size": 175882632,
+    "mtime": 1763034652.6560018,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:42Z"
+  },
+  "C:\\Users\\Admin/Downloads\\K-Loaders\\jCGiYnCCHY.dll": {
+    "size": 37518848,
+    "mtime": 1761406274.6935863,
+    "action": "potential_malicious",
+    "ml_score": 0.11242516338825226,
+    "last_scan": "2025-11-17T16:47:45Z"
+  },
+  "C:\\Users\\Admin/Downloads\\android-studio-2025.1.4.8-windows.exe": {
+    "size": 1396286264,
+    "mtime": 1761141577.2447698,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:42Z"
+  },
+  "C:\\Users\\Admin/Downloads\\AxureRP-Setup (1).exe": {
+    "size": 144060944,
+    "mtime": 1760959553.2938547,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:42Z"
+  },
+  "C:\\Users\\Admin/Downloads\\AxureRP-Setup (2).exe": {
+    "size": 144060944,
+    "mtime": 1760959555.5616808,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:42Z"
+  },
+  "C:\\Users\\Admin/Downloads\\Claude Setup.exe": {
+    "size": 125300384,
+    "mtime": 1762238791.3683548,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:44Z"
+  },
+  "C:\\Users\\Admin/Downloads\\GoogleDriveSetup.exe": {
+    "size": 344688280,
+    "mtime": 1761189750.1394234,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:48Z"
+  },
+  "C:\\Users\\Admin/Downloads\\postgresql-18.0-2-windows-x64 (1).exe": {
+    "size": 371925856,
+    "mtime": 1762157983.9234703,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:48Z"
+  },
+  "C:\\Users\\Admin/Downloads\\postgresql-18.0-2-windows-x64.exe": {
+    "size": 371925856,
+    "mtime": 1762157942.9670577,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:48Z"
+  },
+  "C:\\Users\\Admin/Downloads\\Postman (x64).exe": {
+    "size": 148045952,
+    "mtime": 1762189443.148634,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:48Z"
+  },
+  "C:\\Users\\Admin/Downloads\\VSCodeUserSetup-x64-1.105.1.exe": {
+    "size": 115493856,
+    "mtime": 1761337413.394573,
+    "action": "skipped",
+    "ml_score": null,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\CheatEngine76.exe": {
+    "size": 33675008,
+    "mtime": 1760908332.331802,
+    "action": "potential_malicious",
+    "ml_score": 7.3854844231391326e-06,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\Git-2.51.2-64-bit.exe": {
+    "size": 66178528,
+    "mtime": 1762159187.8261716,
+    "action": "allow",
+    "ml_score": 1.246687133971136e-05,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\RevoltG.Installer.exe": {
+    "size": 578888,
+    "mtime": 1761926684.0446703,
+    "action": "allow",
+    "ml_score": 0.0004282590816728771,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\STOVESetup.exe": {
+    "size": 60600016,
+    "mtime": 1761095387.1231823,
+    "action": "allow",
+    "ml_score": 2.1711990484618582e-05,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\UltraViewer_setup_6.6.124_vi.exe": {
+    "size": 3649776,
+    "mtime": 1763009678.075535,
+    "action": "allow",
+    "ml_score": 3.1080114695214434e-06,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\VencordInstaller.exe": {
+    "size": 10339840,
+    "mtime": 1762669842.2769227,
+    "action": "allow",
+    "ml_score": 0.00022076163440942764,
+    "last_scan": "2025-11-17T16:47:51Z"
+  },
+  "C:\\Users\\Admin/Downloads\\WeMod-Setup.exe": {
+    "size": 144728,
+    "mtime": 1761933818.3744261,
+    "action": "allow",
+    "ml_score": 0.00014387426199391484,
+    "last_scan": "2025-11-17T16:47:51Z"
+  }
+}
