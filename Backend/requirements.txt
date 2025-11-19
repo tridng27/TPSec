@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 lief
 scikit-learn
 fastapi
@@ -9,3 +10,10 @@ watchdog
 xgboost
 numpy
 websockets
+=======
+numpy
+xgboost
+lief
+scikit-learn
+watchdog
+>>>>>>> 1b699d69ae151a9fc64050d8ea633b48b7b6f8cf
