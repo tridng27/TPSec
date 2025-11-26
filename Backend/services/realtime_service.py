@@ -21,7 +21,17 @@ service_state = {
     "observers": [],
     "monitored_folders": [],
     "scan_cache": {},  # In-memory cache for quick checks
-    "alert_callbacks": []  # WebSocket callbacks
+    "alert_callbacks": [],  # WebSocket callbacks for malicious alerts
+    "event_callbacks": [],  # WebSocket callbacks for ALL file events
+    "recent_events": [],  # Keep last 100 events in memory
+    "event_counts": {  # Event statistics
+        "created": 0,
+        "modified": 0,
+        "moved": 0,
+        "deleted": 0,
+        "scanned": 0,
+        "malicious": 0
+    }
 }
 
 
@@ -31,9 +41,47 @@ class RealtimeProtectionHandler(FileSystemEventHandler):
     def __init__(self):
         self.scanner = get_scanner()
     
+    def _add_event_to_history(self, event_type: str, path: str, action: str = None, ml_score: float = None):
+        """Add event to recent history"""
+        event_data = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "event_type": event_type,
+            "file_path": path,
+            "file_name": os.path.basename(path),
+            "action": action,
+            "ml_score": ml_score
+        }
+        
+        # Keep only last 100 events
+        service_state["recent_events"].insert(0, event_data)
+        if len(service_state["recent_events"]) > 100:
+            service_state["recent_events"].pop()
+        
+        # Update counters
+        service_state["event_counts"][event_type] = service_state["event_counts"].get(event_type, 0) + 1
+        if action:
+            service_state["event_counts"]["scanned"] += 1
+            if action == "potential_malicious":
+                service_state["event_counts"]["malicious"] += 1
+        
+        # Notify event stream listeners (for ALL events)
+        event_stream_data = {
+            "type": "file_event",
+            "data": event_data
+        }
+        
+        for callback in service_state["event_callbacks"]:
+            try:
+                callback(event_stream_data)
+            except:
+                pass
+    
     def _scan_and_log(self, path: str, event_type: str):
         """Scan file and log to database"""
         if not os.path.isfile(path) or not self.scanner.is_pe_file(path):
+            # Still log non-PE events to history (for activity monitoring)
+            if os.path.isfile(path):
+                self._add_event_to_history(event_type, path)
             return
         
         try:
@@ -53,6 +101,14 @@ class RealtimeProtectionHandler(FileSystemEventHandler):
             
             # Scan file
             result = self.scanner.scan_file(path, check_size=False)
+            
+            # Add to event history
+            self._add_event_to_history(
+                event_type, 
+                path, 
+                result.get("action"), 
+                result.get("ml_score")
+            )
             
             # Save to database
             with get_db_context() as db:
@@ -76,7 +132,7 @@ class RealtimeProtectionHandler(FileSystemEventHandler):
                     print(f"                 Reason: {result.get('detection_reason')}, "
                           f"Score: {result.get('ml_score', 0):.2f}")
                     
-                    # Notify WebSocket clients
+                    # Notify WebSocket clients (MALICIOUS ALERTS ONLY)
                     alert_data = {
                         "type": "alert",
                         "data": {
@@ -91,7 +147,7 @@ class RealtimeProtectionHandler(FileSystemEventHandler):
                         }
                     }
                     
-                    # Call all registered callbacks
+                    # Call all registered alert callbacks
                     for callback in service_state["alert_callbacks"]:
                         try:
                             callback(alert_data)
@@ -193,7 +249,7 @@ def stop_realtime_protection():
 
 
 def get_protection_status():
-    """Get real-time protection status"""
+    """Get real-time protection status with detailed activity info"""
     with get_db_context() as db:
         service = crud.get_service_status(db, "realtime_protection")
         
@@ -210,12 +266,29 @@ def get_protection_status():
             "status": service_state["status"],
             "uptime_seconds": uptime,
             "monitored_folders": service_state["monitored_folders"],
-            "detections_count": detections_count
+            "detections_count": detections_count,
+            "event_counts": service_state["event_counts"].copy(),
+            "recent_events_count": len(service_state["recent_events"])
         }
 
 
+def get_recent_events(limit: int = 50):
+    """Get recent file system events"""
+    return service_state["recent_events"][:limit]
+
+
+def get_event_statistics():
+    """Get detailed event statistics"""
+    return {
+        "event_counts": service_state["event_counts"].copy(),
+        "total_events": sum(service_state["event_counts"].values()),
+        "monitored_folders": service_state["monitored_folders"],
+        "cache_size": len(service_state["scan_cache"])
+    }
+
+
 def register_alert_callback(callback):
-    """Register a callback for real-time alerts (for WebSocket)"""
+    """Register a callback for real-time MALICIOUS alerts (for WebSocket)"""
     service_state["alert_callbacks"].append(callback)
 
 
@@ -223,6 +296,17 @@ def unregister_alert_callback(callback):
     """Unregister alert callback"""
     if callback in service_state["alert_callbacks"]:
         service_state["alert_callbacks"].remove(callback)
+
+
+def register_event_callback(callback):
+    """Register a callback for ALL file system events (for WebSocket)"""
+    service_state["event_callbacks"].append(callback)
+
+
+def unregister_event_callback(callback):
+    """Unregister event callback"""
+    if callback in service_state["event_callbacks"]:
+        service_state["event_callbacks"].remove(callback)
 
 
 def run_realtime_protection_thread():
