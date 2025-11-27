@@ -427,3 +427,5 @@ venv/
 # Ignore Byproduct Files/Folders
 Backend/quarantine
 Backend/detections.jsonl
+
+Backend/data/av_scanner.db
