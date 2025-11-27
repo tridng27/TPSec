@@ -1,7 +1,7 @@
-import { Shield, Upload, FileCheck, AlertTriangle, Eye, BarChart3, ShieldCheck } from 'lucide-react';
+import { BarChart3, ShieldCheck, FolderSearch } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import type { ViewType } from '../App';
+import { type ViewType } from '../App';
 
 interface SidebarProps {
   currentView: ViewType;
@@ -10,11 +10,8 @@ interface SidebarProps {
 
 export function Sidebar({ currentView, onViewChange }: SidebarProps) {
   const navigationItems = [
-    { id: 'dashboard' as ViewType, label: 'Dashboard', icon: BarChart3, badge: null },
-    { id: 'upload' as ViewType, label: 'Upload Design', icon: Upload, badge: null },
-    { id: 'compliance' as ViewType, label: 'Compliance', icon: FileCheck, badge: '2 Issues', badgeVariant: 'destructive' },
-    { id: 'security' as ViewType, label: 'Security', icon: Shield, badge: '1 Critical', badgeVariant: 'destructive' },
-    { id: 'accessibility' as ViewType, label: 'Accessibility', icon: Eye, badge: '3 Issues', badgeVariant: 'secondary' },
+    { id: 'dashboard' as ViewType, label: 'Dashboard', icon: BarChart3, badge: null, badgeVariant: undefined },
+    { id: 'scan' as ViewType, label: 'Scan', icon: FolderSearch, badge: null, badgeVariant: undefined },
   ];
 
   return (
@@ -25,14 +22,14 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
             <ShieldCheck className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="font-semibold text-lg text-foreground">FinSecure Validator</h1>
+            <h1 className="font-semibold text-lg text-foreground">TPSecurity</h1>
             <p className="text-xs text-muted-foreground">
-              Enterprise Security Platform
+              Security Platform
             </p>
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          Compliance & Security Design Validation for Financial Services
+          Security Application for Threat Detection and Management
         </p>
       </div>
 
@@ -64,21 +61,6 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
           );
         })}
       </nav>
-
-      <div className="mt-8 p-4 bg-destructive/5 border border-destructive/20 rounded-lg">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="p-1 bg-destructive/10 rounded">
-            <AlertTriangle className="h-4 w-4 text-destructive" />
-          </div>
-          <span className="text-sm font-semibold text-destructive">Action Required</span>
-        </div>
-        <p className="text-sm text-muted-foreground mb-2">
-          6 regulatory issues found requiring immediate attention
-        </p>
-        <Button size="sm" variant="outline" className="w-full text-xs">
-          Review Issues
-        </Button>
-      </div>
     </div>
   );
 }
