@@ -1,23 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
+import { RealTimeProtection }  from './components/RealTimeProtection';
+import { Settings } from './components/Settings';
 import  FolderScan  from './components/FolderScan';
 
-export type ViewType = 'dashboard' | 'scan';
+export type ViewType = 'dashboard' | 'scan'| 'realtime'| 'settings';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
-  const [scannedFolders, setScannedFolders] = useState<string[]>([]);
-
-  const renderView = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return <Dashboard uploadedFiles={scannedFolders} />;
-      case 'scan':
-        return <FolderScan onFolderScan={(folderPath) => setScannedFolders(prev => [...prev, folderPath])} />;
-      default:
-        return <Dashboard uploadedFiles={scannedFolders} />;
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    // Initialize from localStorage or default to false
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+    // Apply dark mode class to document
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
+    // Save to localStorage
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  const handleDarkModeChange = (enabled: boolean) => {
+    setDarkMode(enabled);
   };
 
   return (
@@ -27,15 +36,21 @@ export default function App() {
         <div
           className={`absolute inset-0 ${currentView === 'dashboard' ? '' : 'hidden'}`}
         >
-          <Dashboard uploadedFiles={scannedFolders} />
+          <Dashboard/>
         </div>
-
         <div
           className={`absolute inset-0 ${currentView === 'scan' ? '' : 'hidden'}`}
         >
-          <FolderScan
-            onFolderScan={(folderPath) => setScannedFolders(prev => [...prev, folderPath])}
-          />
+          <FolderScan/>
+        </div>
+        <div
+          className={`absolute inset-0 ${currentView === 'realtime' ? '' : 'hidden'}`}
+        >
+          <RealTimeProtection/>
+        </div>
+
+        <div className={`absolute inset-0 ${currentView === 'settings' ? '' : 'hidden'}`}>
+          <Settings darkMode={darkMode} onDarkModeChange={handleDarkModeChange} />
         </div>
       </main>
     </div>

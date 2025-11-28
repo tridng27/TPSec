@@ -14,10 +14,8 @@ import {
   Loader2,
   Plus,
   Trash2,
-  ShieldCheck,
 } from "lucide-react";
 import { ScanApi } from "../api/scanApi";
-import { ProtectionApi } from "../api/protectionApi";
 import { DetectionApi } from "../api/detectionApi";
 
 // declare the injected electron API on the Window interface so TypeScript knows about it
@@ -49,7 +47,6 @@ export default function FolderScan({ onFolderScan }: FolderScanProps) {
   const [newFolder, setNewFolder] = useState("");
   const [scanning, setScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState<ScanStatus | null>(null);
-  const [realtimeProtection, setRealtimeProtection] = useState(false);
   const [animatedProgress, setAnimatedProgress] = useState(0);
   const [maliciousList, setMaliciousList] = useState<any[]>([]);
   const [showReport, setShowReport] = useState(false);
@@ -165,10 +162,8 @@ export default function FolderScan({ onFolderScan }: FolderScanProps) {
     }
   };
 
-  // chạy tick ngay lập tức
   tick();
 
-  // sau mỗi 1 giây sẽ gọi API 1 lần
   pollRef.current = window.setInterval(tick, 1000);
 };
   // Allow user to start a fresh scan UI state
@@ -193,34 +188,6 @@ export default function FolderScan({ onFolderScan }: FolderScanProps) {
       }
     };
   }, []);
-
-  const startRealtimeProtection = async () => {
-    if (folders.length === 0) return;
-
-    try {
-      // Nếu hiện đang OFF → bật bình thường
-      if (!realtimeProtection) {
-        const normalized = folders.map((f) => normalizePath(f));
-
-        console.log("🔰 Starting protection for:", normalized);
-        await ProtectionApi.startProtection(normalized);
-
-        setRealtimeProtection(true);
-        return;
-      }
-
-      // --- Nếu Protection đang bật → hỏi người dùng trước khi tắt ---
-      const confirmStop = window.confirm("Real-time protection is currently enabled.\nDo you want to turn it off?");
-      if (!confirmStop) return;
-
-      console.log("🛑 Stopping protection...");
-      await ProtectionApi.stopProtection();
-      setRealtimeProtection(false);
-
-    } catch (err) {
-      console.error("Realtime protection error:", err);
-    }
-  };
 
   const loadMaliciousReport = async () => {
     try {
@@ -363,36 +330,9 @@ export default function FolderScan({ onFolderScan }: FolderScanProps) {
                   </>
                 )}
               </Button>
-
-              <Button size="lg" variant={realtimeProtection ? "secondary" : "outline"} className="flex-1 h-12" onClick={startRealtimeProtection} disabled={folders.length === 0}>
-                <ShieldCheck className="mr-2 h-5 w-5" />
-                {realtimeProtection ? "Protection Active" : "Enable Real-time Protection"}
-              </Button>
             </div>
           </CardContent>
         </Card>
-
-        {realtimeProtection && (
-          <Card className="shadow-sm border-2 bg-green-50 dark:bg-green-950/20">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-600 rounded-lg">
-                  <ShieldCheck className="h-6 w-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-green-900 dark:text-green-100">Real-time Protection Enabled</h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                    Continuously monitoring {folders.length} folder{folders.length !== 1 ? "s" : ""} for compliance violations
-                  </p>
-                </div>
-                <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300">
-                  <div className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></div>
-                  Active
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {scanStatus && (
           <Card className="shadow-sm border-2">

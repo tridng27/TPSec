@@ -1,4 +1,4 @@
-import { BarChart3, ShieldCheck, FolderSearch } from 'lucide-react';
+import { BarChart3, ShieldCheck, FolderSearch, Activity, Settings } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { type ViewType } from '../App';
@@ -12,6 +12,8 @@ export function Sidebar({ currentView, onViewChange }: SidebarProps) {
   const navigationItems = [
     { id: 'dashboard' as ViewType, label: 'Dashboard', icon: BarChart3, badge: null, badgeVariant: undefined },
     { id: 'scan' as ViewType, label: 'Scan', icon: FolderSearch, badge: null, badgeVariant: undefined },
+    { id: 'realtime' as ViewType, label: 'Real-Time', icon: Activity, badge: null, badgeVariant: undefined },
+    { id: 'settings' as ViewType, label: 'Settings', icon: Settings, badge: null },
   ];
 
   return (
